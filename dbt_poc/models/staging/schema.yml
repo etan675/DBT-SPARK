@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: user_details
+    description: user details.
+    columns:
+      - name: user_id
+        description: Primary key for the customer table
+        tests:
+          - not_null
+          - unique
+      - name: username     
+      - name: first_name       
+      - name: last_name       
+      - name: gender      
+      - name: password      
+      - name: status  

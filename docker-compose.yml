@@ -1,0 +1,39 @@
+version: "3.8"
+
+networks:
+  spark-net:
+    name: spark-net
+
+services:
+  dbt:
+    image: my-dbt
+    hostname: dbt
+    container_name: dbt
+    tty: true
+    depends_on:
+      spark:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 8080:8080
+    networks:
+     - spark-net
+
+  spark:
+    image: spark
+    hostname: spark
+    container_name: spark
+    tty: true
+    networks:
+      - spark-net
+    ports: 
+      - 10000:10000
+    healthcheck:
+      test: /opt/spark/bin/beeline -u jdbc:hive2://localhost:10000 -n "" -p ""
+      interval: 15s
+      retries: 5
+    volumes:
+      - ./spark/source/user_details.parquet:/stuff/user_details.parquet
+      - ./spark/init_warehouse.scala:/stuff/init_warehouse.scala
+      - ./spark/spark_entry.sh:/stuff/spark_entry.sh
+    command: /bin/bash /stuff/spark_entry.sh

@@ -1,0 +1,6 @@
+version: 2 
+sources:
+  - name: my_source
+    schema: default
+    tables: 
+      - name: user_details
